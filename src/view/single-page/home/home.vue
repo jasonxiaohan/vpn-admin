@@ -20,11 +20,12 @@
         </Card>
       </i-col>
     </Row>
+    <!--
     <Row>
       <Card shadow>
         <example style="height: 310px;"/>
       </Card>
-    </Row>
+    </Row>-->
   </div>
 </template>
 
@@ -33,6 +34,16 @@ import InforCard from '_c/info-card'
 import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
+import { mapActions } from 'vuex'
+
+const INFO_MAP = [
+   { title: '新增用户', icon: 'md-person-add', count: 0, color: '#2d8cf0' },
+   { title: '累计点击', icon: 'md-locate', count: 0, color: '#19be6b' },
+   { title: '新增问答', icon: 'md-help-circle', count: 0, color: '#ff9900' },
+   { title: '分享统计', icon: 'md-share', count: 0, color: '#ed3f14' },
+   { title: '新增互动', icon: 'md-chatbubbles', count: 0, color: '#E46CBB' },
+   { title: '新增页面', icon: 'md-map', count: 0, color: '#9A66E4' }
+]
 export default {
   name: 'home',
   components: {
@@ -42,15 +53,11 @@ export default {
     ChartBar,
     Example
   },
+
   data () {
     return {
       inforCardData: [
-        { title: '新增用户', icon: 'md-person-add', count: 803, color: '#2d8cf0' },
-        { title: '累计点击', icon: 'md-locate', count: 232, color: '#19be6b' },
-        { title: '新增问答', icon: 'md-help-circle', count: 142, color: '#ff9900' },
-        { title: '分享统计', icon: 'md-share', count: 657, color: '#ed3f14' },
-        { title: '新增互动', icon: 'md-chatbubbles', count: 12, color: '#E46CBB' },
-        { title: '新增页面', icon: 'md-map', count: 14, color: '#9A66E4' }
+       
       ],
       pieData: [
         { value: 335, name: '直接访问' },
@@ -71,8 +78,17 @@ export default {
     }
   },
   mounted () {
-    //
-  }
+    this.getInfoCard()
+  }, methods: {
+      ...mapActions([
+        'handleInfoCard'
+      ]),
+      getInfoCard() {
+        this.handleInfoCard().then(res => {
+          this.inforCardData = res;
+        })
+      }
+  },
 }
 </script>
 

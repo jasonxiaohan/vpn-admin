@@ -83,3 +83,11 @@ export const restoreTrash = msg_id => {
     }
   })
 }
+
+export const getInfoCard = (token) => {
+  return axios.request({
+      url: '/vpn/user/get-info-card',
+      data: { 'token': token },
+      method: 'post'
+  })
+}
