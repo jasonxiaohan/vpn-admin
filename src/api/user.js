@@ -32,7 +32,7 @@ export const logout = (token) => {
 
 export const getUnreadCount = () => {
   return axios.request({
-    url: 'message/count',
+    url: '/vpn/message/count',
     method: 'get'
   })
 }
@@ -46,7 +46,7 @@ export const getMessage = () => {
 
 export const getContentByMsgId = msg_id => {
   return axios.request({
-    url: 'message/content',
+    url: '/vpn/message/content',
     method: 'get',
     params: {
       msg_id
