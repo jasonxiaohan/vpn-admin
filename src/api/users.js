@@ -1,9 +1,9 @@
 import axios from '@/libs/api.request'
 
-export const getUsers = ({ email, token }) => {
+export const getUsers = ({ email, page, size, token }) => {
     return axios.request({
         url: '/vpn/user/get-info-list',
-        data: { 'email': email, 'token': token },
+        data: { 'email': email, 'page': page, 'size': size, 'token': token },
         method: 'post'
     })
 }
@@ -16,11 +16,19 @@ export const updateUser = (user) => {
     })
 }
 
-export const deleteUser = ({ user_id, token }) => {
+export const deleteUser = ({ email, token }) => {
     return axios.request({
         url: '/vpn/user/user-info',
-        params: { 'user_id': user_id, 'token': token },
+        params: { 'email': email, 'token': token },
         headers: { 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         method: 'delete'
+    })
+}
+
+export const getInvites = ({ email, page, size, token }) => {
+    return axios.request({
+        url: '/vpn/user/invites',
+        data: { 'email': email, 'page': page, 'size': size, 'token': token },
+        method: 'post'
     })
 }

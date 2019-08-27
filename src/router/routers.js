@@ -62,10 +62,48 @@ export default [
         path: 'user',
         name: 'user',
         meta: {
-          icon: 'md-planet',
+          icon: 'md-people',
           title: 'Account managment'
         },
         component: () => import('@/view/user/user.vue')
+      }
+    ]
+  },
+  {
+    path: '/pricing',
+    name: 'pricing',
+    meta: {
+      hideInBread: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'pricing',
+        name: 'pricing',
+        meta: {
+          icon: 'md-apps',
+          title: 'Pricing list'
+        },
+        component: () => import('@/view/pricing/pricing.vue')
+      }
+    ]
+  },
+  {
+    path: '/referral',
+    name: 'referral',
+    meta: {
+      hideInBread: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'referral',
+        name: 'referral',
+        meta: {
+          icon: 'md-settings',
+          title: 'Referral setting'
+        },
+        component: () => import('@/view/referral/referral.vue')
       }
     ]
   },

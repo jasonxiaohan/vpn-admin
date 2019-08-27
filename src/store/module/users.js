@@ -1,4 +1,4 @@
-import { getUsers, updateUser, deleteUser } from '@/api/users'
+import { getUsers, updateUser, deleteUser,getInvites } from '@/api/users'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -8,9 +8,9 @@ export default {
 
     },
     actions: {
-        handleUsersCard({ state, commit }, { email }) {
+        handleUsersCard({ state, commit }, { email, page, size }) {
             return new Promise((resolve, reject) => {
-                getUsers({ "email": email, token: this.state.user.token }).then(res => {
+                getUsers({ "email": email, "page": page, "size": size, token: this.state.user.token }).then(res => {
                     const data = res.data
                     resolve(data)
                 }).catch(err => {
@@ -25,9 +25,20 @@ export default {
                 })
             })
         },
-        handleDeleteUser({ state, commit }, { user_id }) {
+        handleDeleteUser({ state, commit }, { email }) {
             return new Promise((resolve, reject) => {
-                deleteUser({ "user_id": user_id, token: this.state.user.token }).then(res => {
+                deleteUser({ "email": email, token: this.state.user.token }).then(res => {
+                    const data = res.data
+                    resolve(data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        // 获取用户邀请的好友列表
+        handleInviteList({ state, commit }, { email, page, size }) {
+            return new Promise((resolve, reject) => {
+                getInvites({ "email": email, "page": page, "size": size, token: this.state.user.token }).then(res => {
                     const data = res.data
                     resolve(data)
                 }).catch(err => {

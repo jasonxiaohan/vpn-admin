@@ -7,13 +7,10 @@
   <div>
     <!-- <p slot="title">
       <Icon type="mouse"></Icon>点击搜索进行搜索
-    </p> -->
+    </p>-->
     <Row>
-      <Input v-model="searchConName3" placeholder="email address" style="width: 200px" />
-      <span @click="handleSearch3" style="margin: 0 10px;">
-        <Button type="primary" icon="search">搜索</Button>
-      </span>
-      <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
+      <Button type="primary" icon="md-add" @click="addPrice">添加</Button>
+      <!-- <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
         <userEdit :course="user"></userEdit>
       </Modal>
       <Modal v-model="showSubModal">
@@ -21,10 +18,12 @@
       </Modal>
       <Modal v-model="showInviteModal" :styles="{width: '720px'}">
         <invite :invites="invites" :email="email" :pageSize="1"></invite>
+      </Modal>-->
+      <Modal v-model="showAddModal"  @on-ok="update()" @on-cancel="cancel()">
+        <priceEdit :price="price"></priceEdit>
       </Modal>
-      <Button @click="handleCancel3">取消</Button>
-    </Row>    
-    <Table :columns="columns1" :data="data3"></Table>
+    </Row>
+    <Table :columns="columns1" :data="data1"></Table>
     <Page
       :total="dataCount"
       :page-size="pageSize"
@@ -39,56 +38,48 @@
 
 <script>
 import { mapActions } from "vuex";
-import userEdit from "./components/userEdit.vue";
-import subDetail from "./components/subDetail.vue";
-import invite from "./components/invite.vue";
+import priceEdit from "./components/priceEdit.vue";
 export default {
   name: "user",
   data() {
     return {
-      email: "",
-      user: {},
+      price: {},
       // 编辑详情
       showModal: false,
       // 订阅详情
       showSubModal: false,
       // 邀请
-      showInviteModal: false,
-      data3: [],
+      showAddModal: false,
+      data1: [],
       invites: {},
       searchConName3: "",
       columns1: [
         {
-          key: "email",
-          title: "Email"
-        },
-        {
-          key: "planName",
+          key: "plan",
           title: "Plan name"
         },
         {
-          key: "validity",
-          title: "Validity"
+          key: "standard",
+          title: "Standard Price"
         },
         {
-          key: "traffic",
-          title: "Traffic"
+          key: "actual",
+          title: "Actual Price"
+        },
+        // 套餐时长
+        {
+          key: "cycle",
+          title: "Plan circle"
         },
         {
-          key: "device",
-          title: "Device"
-        },
-        {
-          key: "serviceDetail",
-          title: "Service Detail"
-        },
-        {
-          key: "number",
-          title: "Invited number"
-        },
-        {
-          key: "detail",
-          title: "Referral detail"
+          key: "switch",
+          title: "Plan switch",          
+          render: (h,params) => {
+              if(params.row.switch1 == true) {
+                  return h('span','开启');
+              }
+              return h('span','关闭');
+          }
         },
         {
           title: "操作",
@@ -98,54 +89,6 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "info",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
-                      //显示对应的对话框
-                      // this.edit_goods_info_modal = true
-                      this.user = params;
-                      this.showSub(params.index);
-                    }
-                  }
-                },
-                "查看"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "success",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
-                      //显示对应的对话框
-                      // this.edit_goods_info_modal = true
-                      this.user = params;                      
-                      this.showInvite(params.index);
-                    }
-                  }
-                },
-                "赠送"
-              ),
               h(
                 "Button",
                 {
@@ -178,8 +121,8 @@ export default {
                   },
                   on: {
                     "on-ok": () => {
-                      this.handleDeleteUser({
-                        email: this.data3[params.index].email
+                      this.handleDeletePrice({
+                        plan: this.data1[params.index].plan
                       }).then(res => {
                         if (res.code == 0) {
                           this.remove(params.index);
@@ -189,8 +132,6 @@ export default {
                           this.$Message.error("删除失败");
                         }
                       });
-                      // vm.$emit('on-delete', params)
-                      // vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
                 },
@@ -224,24 +165,17 @@ export default {
     };
   },
   components: {
-    userEdit,
-    subDetail,
-    invite
+     priceEdit 
   },
   methods: {
-    ...mapActions([
-      "handleUsersCard",
-      "handleUpdateUser",
-      "handleDeleteUser",
-      "handleInviteList"
-    ]),
+    ...mapActions(["handlePriceList","handleUpdatePrice","handleDeletePrice"]),
     init() {
-      this.handleUsersCard({
+      this.handlePriceList({
         email: this.searchConName3,
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
-        this.data3 = this.initTable3 = res.data;        
+        this.data1 = this.initTable3 = res.data;
         this.dataCount = res.total;
       });
     },
@@ -271,33 +205,29 @@ export default {
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
-        this.data3 = this.initTable3 = res.data;
+        this.data1 = this.initTable3 = res.data;
         this.dataCount = res.total;
         this.$Message.success("搜索成功");
       });
     },
     handleSearch3() {
-      this.data3 = this.initTable3;
-      this.search(this.data3, { name: this.searchConName3 });
+      this.data1 = this.initTable3;
+      this.search(this.data1, { name: this.searchConName3 });
     },
     handleCancel3() {
       this.searchConName3 = "";
       this.init();
     },
     show(index) {
-      this.user = this.data3[index];
-      this.showModal = true;
+      this.price = this.data1[index];
+      this.showAddModal = true;
     },
     showSub(index) {
-      this.user = this.data3[index];
+      this.user = this.data1[index];
       this.showSubModal = true;
     },
-    showInvite(index) {
-      this.initInvite(this.data3[index].email);
-      this.showInviteModal = true;
-    },
     remove(index) {
-      this.data3.splice(index, 1);
+      this.data1.splice(index, 1);
     },
     changepage(page) {
       this.pageCurrent = page;
@@ -309,16 +239,23 @@ export default {
       this.initInvite();
     },
     // 确定
-    success() {
-      var user = this.user;
-      this.handleUpdateUser({ user }).then(res => {
+    update() {
+      var price = this.price;
+      if(price.switch1 == undefined) {
+          price.switch1 = false;
+      }
+      this.handleUpdatePrice({ price }).then(res => {
         if (res.data.code == 0) {
           this.$Message.success("修改成功");
+          this.init();
         } else {
           this.$Message.error("修改失败");
         }
       });
       // alert(this.user.email);
+    },
+    addPrice() {
+        this.showAddModal=true;
     },
     // 取消
     cancel() {
