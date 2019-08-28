@@ -1,6 +1,10 @@
 export default {
   home: '首页',
   login: '登录',
+  user: '用户列表',
+  pricing: '订阅',
+  referral: '分享设置',
+  app: '下载设置',
   components: '组件',
   count_to_page: '数字渐变',
   tables_page: '多功能表格',
@@ -43,5 +47,20 @@ export default {
   org_tree_page: '组织结构树',
   drag_drawer_page: '可拖动抽屉',
   tree_select_page: '树状下拉选择器',
-  referralH1: '转赠设置'
+  referralH1: '转赠设置',
+
+  // 文本
+  text_state_open: '开启',
+  text_state_close: '关闭',
+  text_search: '搜索',
+  text_cacel: '取消',
+  text_define: '确定',
+  text_operate: '操作',
+  text_add: '添加',
+
+  // 按钮
+  btn_look: '查看',
+  btn_gift: '赠送',
+  btn_update: '修改',
+  btn_delete: '删除',
 }

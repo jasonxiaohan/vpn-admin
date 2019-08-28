@@ -14,6 +14,7 @@ import './index.less'
 import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
+import SlideVerify from 'vue-monoplasty-slide-verify';
 import 'v-org-tree/dist/v-org-tree.css'
 // 实际打包时应该不引入mock
 /* eslint-disable */
@@ -23,7 +24,10 @@ Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
 Vue.use(TreeTable)
+
 Vue.use(VOrgTree)
+// 滑动验证码
+Vue.use(SlideVerify);
 /**
  * @description 注册admin内置插件
  */

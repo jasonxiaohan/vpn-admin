@@ -108,61 +108,24 @@ export default [
     ]
   },
   {
-    path: '/tables',
-    name: 'tables',
+    path: '/app',
+    name: 'app',
     meta: {
-      icon: 'logo-buffer',
-      title: '表格'
+      hideInBread: true
     },
     component: Main,
     children: [
       {
-        path: 'dragableTable',
-        name: 'dragable-table',
+        path: 'app',
+        name: 'app',
         meta: {
-          title: '可拖拽排序',
-          icon: 'arrow-move'
+          icon: 'md-arrow-round-down',
+          title: 'App download'
         },
-        component: () => import('@/view/tables/dragable-table.vue')
-      },
-      {
-        path: 'editableTable',
-        name: 'editable-table',
-        meta: {
-          title: '可编辑表格',
-          icon: 'edit'
-        },
-        component: () => import('@/view/tables/editable-table.vue')
-      },
-      {
-        path: 'searchableTable',
-        name: 'searchable-table',
-        meta: {
-          title: '可搜索表格',
-          icon: 'search'
-        },
-        component: () => import('@/view/tables/searchable-table.vue')
-      },
-      {
-        path: 'exportableTable',
-        name: 'exportable-table',
-        meta: {
-          title: '表格导出数据',
-          icon: 'code-download'
-        },
-        component: () => import('@/view/tables/exportable-table.vue')
-      },
-      {
-        path: 'table2image',
-        name: 'table-to-image',
-        meta: {
-          title: '表格转图片',
-          icon: 'images'
-        }, 
-        component: () => import('@/view/tables/table-to-image.vue')
+        component: () => import('@/view/app/app.vue')
       }
     ]
-  },
+  }, 
   {
     path: '/message',
     name: 'message',

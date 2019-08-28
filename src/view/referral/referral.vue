@@ -22,7 +22,7 @@
         <i-col>
           Each referrer can get more <Input v-model="month" style="width:100px;"/> month for free.
         </i-col> 
-        <i-col style="align:center"><Button type="primary" @click="update">UPDATE</Button></i-col>
+        <i-col style="align:center"><Button type="primary" @click="update">{{$t("btn_update")}}</Button></i-col>
       </Row>      
     </Card>
   </div>

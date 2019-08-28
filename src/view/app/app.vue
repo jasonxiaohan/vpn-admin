@@ -5,26 +5,13 @@
 
 <template>
   <div>
-    <!-- <p slot="title">
-      <Icon type="mouse"></Icon>点击搜索进行搜索
-    </p> -->
     <Row>
-      <Input v-model="searchConName3" placeholder="email address" style="width: 200px" />
-      <span @click="handleSearch3" style="margin: 0 10px;">
-        <Button type="primary" icon="search">{{$t('text_search')}}</Button>
-      </span>
-      <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
-        <userEdit :course="user"></userEdit>
+      <Button type="primary" icon="md-add" @click="addApp">{{$t("text_add")}}</Button>
+      <Modal v-model="showAddModal" @on-ok="update()" @on-cancel="cancel()">
+        <appEdit :app="app"></appEdit>
       </Modal>
-      <Modal v-model="showSubModal">
-        <subDetail :sub="user"></subDetail>
-      </Modal>
-      <Modal v-model="showInviteModal" :styles="{width: '720px'}">
-        <invite :invites="invites" :email="email" :pageSize="1"></invite>
-      </Modal>
-      <Button @click="handleCancel3">{{$t('text_cancel')}}</Button>
-    </Row>    
-    <Table :columns="columns1" :data="data3"></Table>
+    </Row>
+    <Table :columns="columns1" :data="data1"></Table>
     <Page
       :total="dataCount"
       :page-size="pageSize"
@@ -39,113 +26,92 @@
 
 <script>
 import { mapActions } from "vuex";
-import userEdit from "./components/userEdit.vue";
-import subDetail from "./components/subDetail.vue";
-import invite from "./components/invite.vue";
+import appEdit from "./components/appEdit.vue";
 export default {
   name: "user",
   data() {
     return {
-      email: "",
-      user: {},
-      // 编辑详情
-      showModal: false,
-      // 订阅详情
-      showSubModal: false,
-      // 邀请
-      showInviteModal: false,
-      data3: [],
-      invites: {},
+      app: {},
+      showAddModal: false,
+      data1: [],
       searchConName3: "",
       columns1: [
         {
-          key: "email",
-          title: "Email"
+          key: "name",
+          title: "Display name"
         },
         {
-          key: "planName",
-          title: "Plan name"
+          key: "osLegend",
+          title: "OS legend",
+          render: (h, params) => {
+             return h('img',{
+                 attrs: {
+                     src: params.row.osLegend,
+                     alt: params.row.name
+                 },
+                 style: {
+                     width:'150px',
+                     height:'150px'
+                 }
+             }) 
+          }
         },
         {
-          key: "validity",
-          title: "Validity"
+          key: "url",
+          title: "URL"
         },
         {
-          key: "traffic",
-          title: "Traffic"
+          key: "legend",
+          title: "App legend",
+          render: (h, params) => {
+             return h('img',{
+                 attrs: {
+                     src: params.row.legend
+                 },
+                 style: {
+                     width:'150px',
+                     height:'150px'
+                 }
+             }) 
+          }
         },
         {
-          key: "device",
-          title: "Device"
+          key: "appUrl",
+          title: "App Url"
         },
         {
-          key: "serviceDetail",
-          title: "Service Detail"
+          key: "logo",
+          title: "Logo",
+          render: (h, params) => {
+             return h('img',{
+                 attrs: {
+                     src: params.row.logo
+                 },
+                 style: {
+                     width:'150px',
+                     height:'150px'
+                 }
+             }) 
+          }
         },
         {
-          key: "number",
-          title: "Invited number"
-        },
-        {
-          key: "detail",
-          title: "Referral detail"
+          key: "active",
+          title: "Plan switch",
+          render: (h, params) => {
+            if (params.row.active == true) {
+              return h("span", this.$i18n.t("text_state_open"));
+            }
+            return h("span", this.$i18n.t("text_state_close"));
+          }
         },
         {
           title: this.$i18n.t("text_operate"),
           key: "action",
-          width: 230,
+          width: 220,
           // fixed: 'right',
           align: "center",
           render: (h, params) => {
-            return h("div", [              
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "info",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
-                      //显示对应的对话框
-                      // this.edit_goods_info_modal = true
-                      this.user = params;
-                      this.showSub(params.index);
-                    }
-                  }
-                },
-                this.$i18n.t("btn_look")
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "success",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
-                      //显示对应的对话框
-                      // this.edit_goods_info_modal = true
-                      this.user = params;                      
-                      this.showInvite(params.index);
-                    }
-                  }
-                },
-                this.$i18n.t("btn_gift")
-              ),
+            return h("div", [
               h(
                 "Button",
                 {
@@ -178,8 +144,8 @@ export default {
                   },
                   on: {
                     "on-ok": () => {
-                      this.handleDeleteUser({
-                        email: this.data3[params.index].email
+                      this.handleDeletePrice({
+                        plan: this.data1[params.index].plan
                       }).then(res => {
                         if (res.code == 0) {
                           this.remove(params.index);
@@ -189,8 +155,6 @@ export default {
                           this.$Message.error("删除失败");
                         }
                       });
-                      // vm.$emit('on-delete', params)
-                      // vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                     }
                   }
                 },
@@ -224,24 +188,16 @@ export default {
     };
   },
   components: {
-    userEdit,
-    subDetail,
-    invite
+    appEdit
   },
   methods: {
-    ...mapActions([
-      "handleUsersCard",
-      "handleUpdateUser",
-      "handleDeleteUser",
-      "handleInviteList"
-    ]),
+    ...mapActions(["handleApps", "handleUpdateApp"]),
     init() {
-      this.handleUsersCard({
-        email: this.searchConName3,
+      this.handleApps({
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
-        this.data3 = this.initTable3 = res.data;        
+        this.data1 = this.initTable3 = res.data;
         this.dataCount = res.total;
       });
     },
@@ -252,7 +208,6 @@ export default {
         page: 1,
         size: this.pageSize
       }).then(res => {
-        this.pageCurrent=1;
         this.invites = res;
       });
     },
@@ -272,33 +227,29 @@ export default {
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
-        this.data3 = this.initTable3 = res.data;
+        this.data1 = this.initTable3 = res.data;
         this.dataCount = res.total;
         this.$Message.success("搜索成功");
       });
     },
     handleSearch3() {
-      this.data3 = this.initTable3;
-      this.search(this.data3, { name: this.searchConName3 });
+      this.data1 = this.initTable3;
+      this.search(this.data1, { name: this.searchConName3 });
     },
     handleCancel3() {
       this.searchConName3 = "";
       this.init();
     },
     show(index) {
-      this.user = this.data3[index];
-      this.showModal = true;
+      this.app = this.data1[index];
+      this.showAddModal = true;
     },
     showSub(index) {
-      this.user = this.data3[index];
+      this.user = this.data1[index];
       this.showSubModal = true;
     },
-    showInvite(index) {
-      this.initInvite(this.data3[index].email);
-      this.showInviteModal = true;
-    },
     remove(index) {
-      this.data3.splice(index, 1);
+      this.data1.splice(index, 1);
     },
     changepage(page) {
       this.pageCurrent = page;
@@ -310,16 +261,26 @@ export default {
       this.initInvite();
     },
     // 确定
-    success() {
-      var user = this.user;
-      this.handleUpdateUser({ user }).then(res => {
+    update() {
+      var app = this.app;
+      if (app.active == undefined) {
+        app.active = false;
+      }
+      if(app.key == undefined) {
+          app.key = Math.random()*100000000000000000;
+      }      
+      this.handleUpdateApp({ app }).then(res => {
         if (res.data.code == 0) {
           this.$Message.success("修改成功");
+          this.init();
         } else {
           this.$Message.error("修改失败");
         }
       });
       // alert(this.user.email);
+    },
+    addApp() {
+      this.showAddModal = true;
     },
     // 取消
     cancel() {

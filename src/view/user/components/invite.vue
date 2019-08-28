@@ -1,6 +1,6 @@
 <style lang="less">
-@import "../../tables/components/common.less";
-@import "../../tables/components/table.less";
+@import "../../../assets/styles/common.less";
+@import "../../../assets/styles/table.less";
 </style>
 
 <template>
@@ -31,11 +31,11 @@ export default {
       default: () => {}
     },
     email: {
-        type:String
+      type: String
     }
   },
   data() {
-    return {      
+    return {
       data1: [],
       columns1: [
         {
@@ -66,6 +66,7 @@ export default {
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
+        this.pageCurrent = 1;
         this.invites.data = res.data;
         this.invites.total = res.total;
       });

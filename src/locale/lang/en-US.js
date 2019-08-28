@@ -1,6 +1,10 @@
 export default {
   home: 'Home',
   login: 'Login',
+  user: 'Account managment',
+  pricing: 'Pricing list',
+  referral: 'Referral setting',
+  app: 'App download setting',
   components: 'Components',
   count_to_page: 'Count-to',
   tables_page: 'Table',
@@ -42,5 +46,20 @@ export default {
   tree_table_page: 'Tree Table',
   org_tree_page: 'Org Tree',
   drag_drawer_page: 'Draggable Drawer',
-  tree_select_page: 'Tree Selector'
+  tree_select_page: 'Tree Selector',
+
+  // 文本
+  text_state_open: 'open',
+  text_state_close: 'close',
+  text_search: 'search',
+  text_cacel: 'cancel',
+  text_define: 'ok',
+  text_operate: 'operate',
+  text_add: 'Add',
+
+  // 按钮
+  btn_look: 'look',
+  btn_gift: 'gift',
+  btn_update: 'update',
+  btn_delete: 'delete',
 }

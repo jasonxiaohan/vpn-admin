@@ -29,8 +29,8 @@
       <FormItem label="switch">
         <Col span="16">
           <i-switch v-model="price.switch1" size="large">
-            <span slot="open">开启</span>
-            <span slot="close">关闭</span>
+            <span slot="open">{{$t('text_state_open')}}</span>
+            <span slot="close">{{$t('text_state_close')}}</span>
           </i-switch>
         </Col>
       </FormItem>

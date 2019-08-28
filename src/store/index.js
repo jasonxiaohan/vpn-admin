@@ -6,6 +6,7 @@ import app from './module/app'
 import users from './module/users'
 import pricing from './module/pricing'
 import referral from './module/referral'
+import download from './module/download'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     app,
     users,
     pricing,
-    referral
+    referral,
+    download
   }
 })

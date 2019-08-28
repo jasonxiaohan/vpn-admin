@@ -1,6 +1,6 @@
 <style lang="less">
-@import "../tables/components/common.less";
-@import "../tables/components/table.less";
+@import "../../assets/styles/common.less";
+@import "../../assets/styles/table.less";
 </style>
 
 <template>
@@ -9,17 +9,8 @@
       <Icon type="mouse"></Icon>点击搜索进行搜索
     </p>-->
     <Row>
-      <Button type="primary" icon="md-add" @click="addPrice">添加</Button>
-      <!-- <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
-        <userEdit :course="user"></userEdit>
-      </Modal>
-      <Modal v-model="showSubModal">
-        <subDetail :sub="user"></subDetail>
-      </Modal>
-      <Modal v-model="showInviteModal" :styles="{width: '720px'}">
-        <invite :invites="invites" :email="email" :pageSize="1"></invite>
-      </Modal>-->
-      <Modal v-model="showAddModal"  @on-ok="update()" @on-cancel="cancel()">
+      <Button type="primary" icon="md-add" @click="addPrice">{{$t("text_add")}}</Button>
+      <Modal v-model="showAddModal" @on-ok="update()" @on-cancel="cancel()">
         <priceEdit :price="price"></priceEdit>
       </Modal>
     </Row>
@@ -73,16 +64,16 @@ export default {
         },
         {
           key: "switch",
-          title: "Plan switch",          
-          render: (h,params) => {
-              if(params.row.switch1 == true) {
-                  return h('span','开启');
-              }
-              return h('span','关闭');
+          title: "Plan switch",
+          render: (h, params) => {
+            if (params.row.switch1 == true) {
+              return h("span", this.$i18n.t("text_state_open"));
+            }
+            return h("span", this.$i18n.t("text_state_close"));
           }
         },
         {
-          title: "操作",
+          title: this.$i18n.t("text_operate"),
           key: "action",
           width: 220,
           // fixed: 'right',
@@ -106,7 +97,7 @@ export default {
                     }
                   }
                 },
-                "修改"
+                this.$i18n.t("btn_update")
               ),
               //弹窗层-包含按钮
               h(
@@ -149,7 +140,7 @@ export default {
                         }
                       }
                     },
-                    "删除"
+                    this.$i18n.t("btn_delete")
                   )
                 ]
               )
@@ -165,10 +156,14 @@ export default {
     };
   },
   components: {
-     priceEdit 
+    priceEdit
   },
   methods: {
-    ...mapActions(["handlePriceList","handleUpdatePrice","handleDeletePrice"]),
+    ...mapActions([
+      "handlePriceList",
+      "handleUpdatePrice",
+      "handleDeletePrice"
+    ]),
     init() {
       this.handlePriceList({
         email: this.searchConName3,
@@ -241,8 +236,8 @@ export default {
     // 确定
     update() {
       var price = this.price;
-      if(price.switch1 == undefined) {
-          price.switch1 = false;
+      if (price.switch1 == undefined) {
+        price.switch1 = false;
       }
       this.handleUpdatePrice({ price }).then(res => {
         if (res.data.code == 0) {
@@ -255,7 +250,8 @@ export default {
       // alert(this.user.email);
     },
     addPrice() {
-        this.showAddModal=true;
+      this.price = {};
+      this.showAddModal = true;
     },
     // 取消
     cancel() {
