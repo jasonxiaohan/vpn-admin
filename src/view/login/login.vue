@@ -24,16 +24,19 @@ export default {
   },
   methods: {
     ...mapActions(["handleLogin", "getUserInfo"]),
-    handleSubmit({ username, password,msg }) {
-      if(msg != 'login success') {
-        this.$Message.error('登录失败');
+    handleSubmit({ username, password, msg }) {
+      if (msg != "login success") {
+        this.$Message.error("登录失败");
         return;
       }
       this.handleLogin({ username, password }).then(res => {
         this.getUserInfo().then(res => {
-          this.$router.push({
-            name: this.$config.homeName
-          });
+          this.$Message.success("登录成功");
+          setTimeout(() => {
+            this.$router.push({
+              name: this.$config.homeName
+            });
+          }, 1000);
         });
       });
     }

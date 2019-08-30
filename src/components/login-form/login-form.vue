@@ -19,7 +19,7 @@
         :l="30"
         :r="10"
         :w="310"
-        :h="155"
+        :h="115"
         @success="onSuccess"
         @fail="onFail"
         @refresh="onRefresh"
