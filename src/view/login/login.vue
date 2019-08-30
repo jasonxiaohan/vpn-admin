@@ -24,21 +24,33 @@ export default {
   },
   methods: {
     ...mapActions(["handleLogin", "getUserInfo"]),
-    handleSubmit({ username, password, msg }) {
+    handleSubmit({ userName, pwd, msg }) {
       if (msg != "login success") {
         this.$Message.error("登录失败");
         return;
       }
-      this.handleLogin({ username, password }).then(res => {
-        this.getUserInfo().then(res => {
+      this.handleLogin({ userName, pwd, oneTimePwd: "" })
+        .then(res => {
           this.$Message.success("登录成功");
           setTimeout(() => {
             this.$router.push({
               name: this.$config.homeName
             });
           }, 1000);
+
+          // this.getUserInfo().then(res => {
+          //   this.$Message.success("登录成功");
+          //   setTimeout(() => {
+          //     this.$router.push({
+          //       name: this.$config.homeName
+          //     });
+          //   }, 1000);
+          // });
+        })
+        .catch(err => {
+          this.$Message.error("登录失败");
+          return;
         });
-      });
     }
   }
 };

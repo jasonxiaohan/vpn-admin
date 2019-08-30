@@ -22,11 +22,12 @@ export const errorReq = () => {
 }
 
 export const saveErrorLogger = info => {
-  return axios.request({
-    url: '/vpn/user/save_error_logger',
-    data: info,
-    method: 'post'
-  })
+  return {"code":0,data:[],"msg":""};
+  // return axios.request({
+  //   url: '/vpn/user/save_error_logger',
+  //   data: info,
+  //   method: 'post'
+  // })
 }
 
 export const uploadImg = formData => {

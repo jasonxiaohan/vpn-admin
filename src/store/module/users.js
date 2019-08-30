@@ -1,4 +1,4 @@
-import { getUsers, updateUser, deleteUser,getInvites } from '@/api/users'
+import { getUsers, updateUser, deleteUser, getInvites, subHistory } from '@/api/users'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -39,6 +39,17 @@ export default {
         handleInviteList({ state, commit }, { email, page, size }) {
             return new Promise((resolve, reject) => {
                 getInvites({ "email": email, "page": page, "size": size, token: this.state.user.token }).then(res => {
+                    const data = res.data
+                    resolve(data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        // 订阅列表
+        handleSubHistory({ state, commit }, { customerId, page, size }) {
+            return new Promise((resolve, reject) => {
+                subHistory({ "customerId": customerId, "page": page, "size": size, token: this.state.user.token }).then(res => {
                     const data = res.data
                     resolve(data)
                 }).catch(err => {

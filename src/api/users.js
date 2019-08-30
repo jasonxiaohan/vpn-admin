@@ -2,8 +2,8 @@ import axios from '@/libs/api.request'
 
 export const getUsers = ({ email, page, size, token }) => {
     return axios.request({
-        url: '/vpn/user/get-info-list',
-        data: { 'email': email, 'page': page, 'size': size, 'token': token },
+        url: '/api/admin/listCustomer',
+        data: { 'email': email, 'pageSize': page, 'size': size, 'token': token },
         method: 'post'
     })
 }
@@ -29,6 +29,14 @@ export const getInvites = ({ email, page, size, token }) => {
     return axios.request({
         url: '/vpn/user/invites',
         data: { 'email': email, 'page': page, 'size': size, 'token': token },
+        method: 'post'
+    })
+}
+
+export const subHistory = ({ customerId, page, size, token }) => {
+    return axios.request({
+        url: '/api/admin/subHistory',
+        data: { 'customerId': customerId, 'pageSize': page, 'size': size, 'token': token },
         method: 'post'
     })
 }

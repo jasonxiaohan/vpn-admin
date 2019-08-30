@@ -10,7 +10,8 @@ const { homeName } = config
 Vue.use(Router)
 const router = new Router({
   routes,
-  mode: 'history'
+  mode: 'history',
+  // base: '/htcm_front/'
 })
 const LOGIN_PAGE_NAME = 'login'
 

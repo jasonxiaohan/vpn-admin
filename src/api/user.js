@@ -1,12 +1,13 @@
 import axios from '@/libs/api.request'
 
-export const login = ({ username, password }) => {
+export const login = ({ userName, pwd, oneTimePwd }) => {
   const data = {
-    username,
-    password
+    userName,
+    pwd,
+    oneTimePwd
   }
   return axios.request({
-    url: '/vpn/user/login',
+    url: '/api/admin/login',
     data,
     method: 'post'
   })
@@ -31,10 +32,11 @@ export const logout = (token) => {
 }
 
 export const getUnreadCount = () => {
-  return axios.request({
-    url: '/vpn/message/count',
-    method: 'get'
-  })
+  return 1;
+  // return axios.request({
+  //   url: '/vpn/message/count',
+  //   method: 'get'
+  // })
 }
 
 export const getMessage = () => {
@@ -86,8 +88,8 @@ export const restoreTrash = msg_id => {
 
 export const getInfoCard = (token) => {
   return axios.request({
-      url: '/vpn/user/get-info-card',
-      data: { 'token': token },
-      method: 'post'
+    url: '/vpn/user/get-info-card',
+    data: { 'token': token },
+    method: 'post'
   })
 }

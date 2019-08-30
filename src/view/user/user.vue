@@ -7,7 +7,7 @@
   <div>
     <!-- <p slot="title">
       <Icon type="mouse"></Icon>点击搜索进行搜索
-    </p> -->
+    </p>-->
     <Row>
       <Input v-model="searchConName3" placeholder="email address" style="width: 200px" />
       <span @click="handleSearch3" style="margin: 0 10px;">
@@ -16,14 +16,14 @@
       <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
         <userEdit :course="user"></userEdit>
       </Modal>
-      <Modal v-model="showSubModal">
-        <subDetail :sub="user"></subDetail>
+      <Modal v-model="showSubModal" :styles="{width: '720px'}">
+        <subHistory :subs="subs" :pageSize="1"></subHistory>
       </Modal>
       <Modal v-model="showInviteModal" :styles="{width: '720px'}">
         <invite :invites="invites" :email="email" :pageSize="1"></invite>
       </Modal>
       <Button @click="handleCancel3">{{$t('text_cancel')}}</Button>
-    </Row>    
+    </Row>
     <Table :columns="columns1" :data="data3"></Table>
     <Page
       :total="dataCount"
@@ -40,13 +40,14 @@
 <script>
 import { mapActions } from "vuex";
 import userEdit from "./components/userEdit.vue";
-import subDetail from "./components/subDetail.vue";
+import subHistory from "./components/subHistory.vue";
 import invite from "./components/invite.vue";
 export default {
   name: "user",
   data() {
     return {
       email: "",
+      customerId: 0,
       user: {},
       // 编辑详情
       showModal: false,
@@ -56,6 +57,7 @@ export default {
       showInviteModal: false,
       data3: [],
       invites: {},
+      subs: {},
       searchConName3: "",
       columns1: [
         {
@@ -63,12 +65,23 @@ export default {
           title: "Email"
         },
         {
-          key: "planName",
+          key: "currentPlanName",
           title: "Plan name"
         },
         {
           key: "validity",
-          title: "Validity"
+          title: "Validity",
+          render: (h, params) => {
+            var start =
+              params.row.creationDateTime.slice(0, 3).join("/") +
+              " " +
+              params.row.creationDateTime.slice(3, 6).join(":");
+            var end =
+              params.row.expireTime.slice(0, 3).join("/") +
+              " " +
+              params.row.expireTime.slice(3, 6).join(":");
+            return h("span", start + "-" + end);
+          }
         },
         {
           key: "traffic",
@@ -79,8 +92,31 @@ export default {
           title: "Device"
         },
         {
-          key: "serviceDetail",
-          title: "Service Detail"
+          key: "action",
+          title: "Service Detail",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "info",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.user = params;
+                      this.showSub(params.index);
+                    }
+                  }
+                },
+                this.$i18n.t("btn_look")
+              )
+            ]);
+          }
         },
         {
           key: "number",
@@ -97,7 +133,7 @@ export default {
           // fixed: 'right',
           align: "center",
           render: (h, params) => {
-            return h("div", [              
+            return h("div", [
               h(
                 "Button",
                 {
@@ -110,11 +146,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
                       //显示对应的对话框
-                      // this.edit_goods_info_modal = true
                       this.user = params;
                       this.showSub(params.index);
                     }
@@ -134,12 +166,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.goodsInfoList[params.row._index] = dsiasdh
-                      // console.log(this.goodsInfoList[params.row._index])
-                      // this.currgoodsInfoList = params.row
-                      //显示对应的对话框
-                      // this.edit_goods_info_modal = true
-                      this.user = params;                      
+                      this.user = params;
                       this.showInvite(params.index);
                     }
                   }
@@ -225,7 +252,7 @@ export default {
   },
   components: {
     userEdit,
-    subDetail,
+    subHistory,
     invite
   },
   methods: {
@@ -233,7 +260,8 @@ export default {
       "handleUsersCard",
       "handleUpdateUser",
       "handleDeleteUser",
-      "handleInviteList"
+      "handleInviteList",
+      "handleSubHistory"
     ]),
     init() {
       this.handleUsersCard({
@@ -241,7 +269,7 @@ export default {
         page: this.pageCurrent,
         size: this.pageSize
       }).then(res => {
-        this.data3 = this.initTable3 = res.data;        
+        this.data3 = this.initTable3 = res.data;
         this.dataCount = res.total;
       });
     },
@@ -252,8 +280,19 @@ export default {
         page: 1,
         size: this.pageSize
       }).then(res => {
-        this.pageCurrent=1;
+        this.pageCurrent = 1;
         this.invites = res;
+      });
+    },
+    initSubs(customerId) {
+      this.customerId = customerId;
+      this.handleSubHistory({
+        customerId: customerId,
+        page: 1,
+        size: this.pageSize
+      }).then(res => {
+        this.pageCurrent = 1;
+        this.subs = res;
       });
     },
     search(data, argumentObj) {
@@ -290,7 +329,7 @@ export default {
       this.showModal = true;
     },
     showSub(index) {
-      this.user = this.data3[index];
+      this.initSubs(this.data3[index].customerId);
       this.showSubModal = true;
     },
     showInvite(index) {
