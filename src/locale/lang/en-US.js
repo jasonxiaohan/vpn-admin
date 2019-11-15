@@ -52,7 +52,7 @@ export default {
   text_state_open: 'open',
   text_state_close: 'close',
   text_search: 'search',
-  text_cacel: 'cancel',
+  text_cancel: 'cancel',
   text_define: 'ok',
   text_operate: 'operate',
   text_add: 'Add',

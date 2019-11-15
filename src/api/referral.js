@@ -8,13 +8,14 @@ export const getReferral = () => {
     })
 }
 
-export const updateReferral = (friend, month) => {
+export const updateReferral = ({friend, month, token}) => {
     return axios.request({
-        url: '/vpn/referral/referral',
+        url: '/api/admin/referralSetting',
         params: {
-            'friend': friend,
-            'month': month
+            'numOfFriends': friend,
+            'numOfDays': month,
+            'token': token
         },
-        method: 'put'
+        method: 'POST'
     })
 }

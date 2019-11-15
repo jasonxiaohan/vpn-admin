@@ -16,8 +16,11 @@
       <Modal v-model="showModal" @on-ok="success()" @on-cancel="cancel()">
         <userEdit :course="user"></userEdit>
       </Modal>
-      <Modal v-model="showSubModal" :styles="{width: '720px'}">
+      <Modal v-model="showSubModal" :styles="{width: '820px'}">
         <subHistory :subs="subs" :pageSize="1"></subHistory>
+      </Modal>
+      <Modal v-model="showReferralModal" :styles="{width: '820px'}">
+        <referralHistory :referrals="referrals" :pageSize="1"></referralHistory>
       </Modal>
       <Modal v-model="showInviteModal" :styles="{width: '720px'}">
         <invite :invites="invites" :email="email" :pageSize="1"></invite>
@@ -41,6 +44,7 @@
 import { mapActions } from "vuex";
 import userEdit from "./components/userEdit.vue";
 import subHistory from "./components/subHistory.vue";
+import referralHistory from "./components/referralHistory.vue";
 import invite from "./components/invite.vue";
 export default {
   name: "user",
@@ -51,13 +55,16 @@ export default {
       user: {},
       // 编辑详情
       showModal: false,
-      // 订阅详情
+      // 订阅列表
       showSubModal: false,
+      subs: {},
+      // 赠送列表
+      showReferralModal: false,
+      referrals: {},
       // 邀请
       showInviteModal: false,
       data3: [],
       invites: {},
-      subs: {},
       searchConName3: "",
       columns1: [
         {
@@ -108,7 +115,6 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.user = params;
                       this.showSub(params.index);
                     }
                   }
@@ -123,15 +129,8 @@ export default {
           title: "Invited number"
         },
         {
-          key: "detail",
-          title: "Referral detail"
-        },
-        {
-          title: this.$i18n.t("text_operate"),
           key: "action",
-          width: 230,
-          // fixed: 'right',
-          align: "center",
+          title: "Referral detail",
           render: (h, params) => {
             return h("div", [
               h(
@@ -146,14 +145,23 @@ export default {
                   },
                   on: {
                     click: () => {
-                      //显示对应的对话框
-                      this.user = params;
-                      this.showSub(params.index);
+                      this.showReferral(params.index);
                     }
                   }
                 },
                 this.$i18n.t("btn_look")
-              ),
+              )
+            ]);
+          }
+        },
+        {
+          title: this.$i18n.t("text_operate"),
+          key: "action",
+          width: 230,
+          // fixed: 'right',
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
               h(
                 "Button",
                 {
@@ -253,6 +261,7 @@ export default {
   components: {
     userEdit,
     subHistory,
+    referralHistory,
     invite
   },
   methods: {
@@ -261,7 +270,8 @@ export default {
       "handleUpdateUser",
       "handleDeleteUser",
       "handleInviteList",
-      "handleSubHistory"
+      "handleSubHistory",
+      "handleReferralHistory"
     ]),
     init() {
       this.handleUsersCard({
@@ -285,6 +295,7 @@ export default {
       });
     },
     initSubs(customerId) {
+      customerId = 2;
       this.customerId = customerId;
       this.handleSubHistory({
         customerId: customerId,
@@ -294,6 +305,17 @@ export default {
         this.pageCurrent = 1;
         this.subs = res;
       });
+    },
+    initReferral(customerId) {      
+      this.customerId = customerId;
+      this.handleReferralHistory({
+        customerId: customerId,
+        page: 1,
+        size: this.pageSize
+      }).then(res => {
+        this.pageCurrent = 1;
+        this.referrals = res;
+      })
     },
     search(data, argumentObj) {
       // let res = data;
@@ -335,6 +357,10 @@ export default {
     showInvite(index) {
       this.initInvite(this.data3[index].email);
       this.showInviteModal = true;
+    },
+    showReferral(index) {
+      this.initReferral(this.data3[index].customerId);
+      this.showReferralModal = true;
     },
     remove(index) {
       this.data3.splice(index, 1);

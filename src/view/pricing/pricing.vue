@@ -46,15 +46,15 @@ export default {
       searchConName3: "",
       columns1: [
         {
-          key: "plan",
+          key: "name",
           title: "Plan name"
         },
         {
-          key: "standard",
+          key: "fee",
           title: "Standard Price"
         },
         {
-          key: "actual",
+          key: "actualFee",
           title: "Actual Price"
         },
         // 套餐时长

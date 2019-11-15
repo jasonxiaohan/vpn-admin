@@ -94,13 +94,12 @@ export default {
       });
     },
     getPlanSelected() {
-      debugger
       console.log(this.planSelected);
     }
   },
   watch: {
     planSelected: function(val) {
-        alert(val);
+        // alert(val);
     }
   },
 };

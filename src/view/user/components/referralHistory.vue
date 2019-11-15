@@ -5,11 +5,11 @@
 
 <template>
   <div>
-    <h1>订阅列表</h1>
+    <h1>赠送列表</h1>
     <div>
-      <Table :columns="columns1" :data="subs.data"></Table>
+      <Table :columns="columns1" :data="referrals.data"></Table>
       <Page
-        :total="subs.total"
+        :total="referrals.total"
         :page-size="pageSize"
         @on-change="changepage"
         @on-page-size-change="_nowPageSize"
@@ -24,9 +24,9 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  name: "subHistory",
+  name: "referralHistory",
   props: {
-    subs: {
+    referrals: {
       type: Object,
       default: () => {}
     },

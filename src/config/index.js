@@ -2,7 +2,7 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: 'vpn-admin',
+  title: 'EasyVPN - 后台管理',
   /**
    * @description token在Cookie中存储的天数，默认1天
    */
@@ -17,8 +17,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://52.64.114.149:8080/',
-    pro: 'http://localhost:8081/'
+    dev: 'http://3.1.238.2:8080/',
+    pro: 'http://3.1.238.2:8080/'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

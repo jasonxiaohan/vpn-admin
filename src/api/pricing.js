@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const getPrices = ({ page, size, token }) => {
     return axios.request({
-        url: '/vpn/price/get-price-list',
+        url: '/api/admin/listPlans',
         data: { 'token': token, 'page': page, 'size': size },
         method: 'post'
     })

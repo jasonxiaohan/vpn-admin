@@ -1,4 +1,4 @@
-import { getUsers, updateUser, deleteUser, getInvites, subHistory } from '@/api/users'
+import { getUsers, updateUser, deleteUser, getInvites, subHistory,referralHistory } from '@/api/users'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -50,6 +50,17 @@ export default {
         handleSubHistory({ state, commit }, { customerId, page, size }) {
             return new Promise((resolve, reject) => {
                 subHistory({ "customerId": customerId, "page": page, "size": size, token: this.state.user.token }).then(res => {
+                    const data = res.data
+                    resolve(data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        // 赠送列表
+        handleReferralHistory({ state, commit }, { customerId, page, size }) {
+            return new Promise((resolve, reject) => {
+                referralHistory({ "customerId": customerId, "page": page, "size": size, token: this.state.user.token }).then(res => {
                     const data = res.data
                     resolve(data)
                 }).catch(err => {

@@ -40,3 +40,11 @@ export const subHistory = ({ customerId, page, size, token }) => {
         method: 'post'
     })
 }
+
+export const referralHistory = ({ customerId, page, size, token }) => {
+    return axios.request({
+        url: '/api/admin/listReferral',
+        data: { 'customerId': customerId, 'pageSize': page, 'size': size, 'token': token },
+        method: 'post'
+    })
+}
